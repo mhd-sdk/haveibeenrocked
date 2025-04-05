@@ -9,15 +9,11 @@ import (
 
 var (
 	ErrMissingEnvVars = errors.New("missing environment variables")
-	ErrLoadingEnv     = errors.New("could not load environment variables")
 )
 
 // Load env variables from .env file if it exists, otherwise use system environment variables
 func LoadEnv() (err error) {
-	err = godotenv.Load()
-	if err != nil {
-		return ErrLoadingEnv
-	}
+	godotenv.Load()
 
 	apiPort := os.Getenv("API_PORT")
 	redisHost := os.Getenv("REDIS_HOST")

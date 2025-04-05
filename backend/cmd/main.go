@@ -36,5 +36,5 @@ func main() {
 	fiber.Use(logger.New(logger.Config{}))
 
 	fiber.Post("/api/v1", handlers.HandleCheck)
-	log.Fatal(fiber.Listen(":3000"))
+	log.Fatal(fiber.Listen(":" + os.Getenv("API_PORT")))
 }
