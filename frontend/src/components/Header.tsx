@@ -1,6 +1,11 @@
 import { Moon, ShieldAlert, Sun } from "lucide-react";
 
-export default function Header({ toggleDarkMode, darkMode }) {
+interface Props {
+  toggleDarkMode: () => void;
+  darkMode: boolean;
+}
+
+export default function Header({ toggleDarkMode, darkMode }: Props) {
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center border-b">
       <a className="flex items-center justify-center" href="#">
