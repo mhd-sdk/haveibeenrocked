@@ -1,11 +1,11 @@
-import { Moon, ShieldAlert, Sun } from "lucide-react";
+import { Moon, ShieldAlert, Sun } from 'lucide-react';
 
 interface Props {
   toggleDarkMode: () => void;
   darkMode: boolean;
 }
 
-export default function Header({ toggleDarkMode, darkMode }: Props) {
+export const Header = ({ toggleDarkMode, darkMode }: Props) => {
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center border-b">
       <a className="flex items-center justify-center" href="#">
@@ -16,19 +16,20 @@ export default function Header({ toggleDarkMode, darkMode }: Props) {
         <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
           Home
         </a>
-        <a className="text-sm font-medium hover:underline underline-offset-4" href="/about">
-          À propos
+        <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
+          About
         </a>
         <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
           API
         </a>
         <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
-          Donate
+          Contact
         </a>
+
         <button onClick={toggleDarkMode} className="text-sm font-medium cursor-pointer">
           {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </button>
       </nav>
     </header>
   );
-} 
+};

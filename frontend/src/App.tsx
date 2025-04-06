@@ -1,30 +1,33 @@
-import { useState } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import About from './components/About';
+import { useEffect, useState } from 'react';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem('darkMode');
+    return savedTheme === 'true';
+  });
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.documentElement.classList.toggle('dark', !darkMode);
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem('darkMode', newMode.toString());
+      return newMode;
+    });
   };
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+  }, [darkMode]);
+
   return (
-    <Router>
-      <div className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}>
-        <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<MainContent />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}>
+      <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+      <main className="flex-1">
+        <MainContent />
+      </main>
+      <Footer />
+    </div>
   );
 }

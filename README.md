@@ -6,15 +6,16 @@
 - Unit tests + integration tests using Testcontainers
 - Use gitmojis (or conventionnal commits convention)
 - Try out v0 for initial frontend design
-- use tailwind as it is pretty hyped (usually use styled component but some changes would be fun)
+- use tailwind as it is pretty hyped (usually use styled component but some changes would be fun) 
 
 ## Notes
 - I chose to make a multi-stage image for the frontend, first layer for building Vite, second for lightweight production-ready
 - Over-engineered, but Nginx reverse proxy allows caching, load balancing, static serving, SSL, and many more. This choice is for scalability.
 - Also overengineered, The password database is pretty big; having an in-memory cache like Redis can speed up frequent password requests (yes i could easily cache in my go program, but lemme flex a bit pls ! i really want this job)
 - For now, passwords will be loaded at API startup, skipped if the database already contains it. Also, I use Postgres because the job is asking for it :)
-- Ollama for some AI hype, mainly used for rating passwords on a 5 stars scale.
+- Ollama for some AI hype, used for providing a list of password that ressembles the one provided, and give a 5 star rating of the password strength. ofc the proposed pwds should not be compomised.
 - I won't use branching strategies as i'm alone on the project and it will never be deployed in prod, but i'm pretty familliar with the trunk-based development
+- I tried to design the docker env as clean as possible, thus only nginx has a port forwarding on the host machine, nobody will have direct access to the other services, this can be seen as a security measure :)
 
 ![Description de l'image](docs/haveibeenrocked-architecture.png)
 
