@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
-	"github.com/jackc/pgx/v5"
 	"github.com/mhd-sdk/haveibeenrocked/internal/anssi"
+	"github.com/mhd-sdk/haveibeenrocked/internal/db"
 )
 
 type PasswordCheckResponse struct {
@@ -16,7 +16,7 @@ type PasswordCheckResponse struct {
 
 var ctx = context.Background()
 
-func HandleCheck(db *pgx.Conn, redisClient *redis.Client) fiber.Handler {
+func HandleCheck(repositories *db.Repositories, redisClient *redis.Client) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		password := c.FormValue("password")
 
@@ -32,8 +32,7 @@ func HandleCheck(db *pgx.Conn, redisClient *redis.Client) fiber.Handler {
 		checkResult := anssi.CheckPassword(password)
 
 		// Vérifier dans la base de données si le mot de passe est compromis
-		var isLeaked bool
-		err = db.QueryRow(ctx, "SELECT EXISTS(SELECT 1 FROM compromised_passwords WHERE password = $1)", password).Scan(&isLeaked)
+		isLeaked, err := repositories.PasswordRepo.CheckPassword(ctx, password)
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": "Database error"})
 		}

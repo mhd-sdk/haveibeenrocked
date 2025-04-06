@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"log/slog"
 	"os"
@@ -10,9 +9,9 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/jackc/pgx/v5"
 	"github.com/lmittmann/tint"
 	"github.com/mhd-sdk/haveibeenrocked/internal/config"
+	"github.com/mhd-sdk/haveibeenrocked/internal/db"
 	"github.com/mhd-sdk/haveibeenrocked/internal/handlers"
 )
 
@@ -32,9 +31,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	db, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	repos, err := db.Init()
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatal("Failed to initialize database and repositories:", err)
 	}
 
 	redisClient := redis.NewClient(&redis.Options{
@@ -46,7 +45,7 @@ func main() {
 	})
 	fiber.Use(logger.New(logger.Config{}))
 
-	fiber.Post("/api/check", handlers.HandleCheck(db, redisClient))
+	fiber.Post("/api/check", handlers.HandleCheck(repos, redisClient))
 
 	slog.Info("Service listening on port: " + os.Getenv("API_PORT"))
 

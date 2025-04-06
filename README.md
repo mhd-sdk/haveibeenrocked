@@ -8,6 +8,9 @@
 - Try out v0 for initial frontend design
 - use tailwind as it is pretty hyped (usually use styled component but some changes would be fun) 
 - Open api Documentation (maybe with swagger ? would be cool to make a tool that use ai to parse go code and generate docs...)
+- repositories pattern
+- automated download of passwords file with mage
+- dependabot for "secure by design"
 
 ## Notes
 - I chose to make a multi-stage image for the frontend, first layer for building Vite, second for lightweight production-ready

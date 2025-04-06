@@ -1,0 +1,32 @@
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_API_PORT=11434
+      - OLLAMA_API_HOST=localhost
+    volumes:
+      - ollama_data:/ollama
+      
+volumes:
+  postgres_data:
+    driver: local
+  ollama_data:
+     driver: local
