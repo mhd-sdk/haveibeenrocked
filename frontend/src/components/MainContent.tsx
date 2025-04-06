@@ -23,6 +23,11 @@ export default function MainContent() {
 
     if (password) {
       setShowResults(true);
+      setResults({
+        isLeaked: true,
+        meetsANSSI: false,
+        score: 0,
+      });
     }
   };
 

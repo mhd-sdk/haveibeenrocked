@@ -7,6 +7,7 @@
 - Use gitmojis (or conventionnal commits convention)
 - Try out v0 for initial frontend design
 - use tailwind as it is pretty hyped (usually use styled component but some changes would be fun) 
+- Open api Documentation (maybe with swagger ? would be cool to make a tool that use ai to parse go code and generate docs...)
 
 ## Notes
 - I chose to make a multi-stage image for the frontend, first layer for building Vite, second for lightweight production-ready
@@ -15,7 +16,7 @@
 - For now, passwords will be loaded at API startup, skipped if the database already contains it. Also, I use Postgres because the job is asking for it :)
 - Ollama for some AI hype, used for providing a list of password that ressembles the one provided, and give a 5 star rating of the password strength. ofc the proposed pwds should not be compomised.
 - I won't use branching strategies as i'm alone on the project and it will never be deployed in prod, but i'm pretty familliar with the trunk-based development
-- I tried to design the docker env as clean as possible, thus only nginx has a port forwarding on the host machine, nobody will have direct access to the other services, this can be seen as a security measure :)
+- I tried to design the docker env as clean as possible, in a production env only nginx should be exposed, but for developer experience databases also have port forwarding.  
 
 ![Description de l'image](docs/haveibeenrocked-architecture.png)
 

@@ -4,7 +4,7 @@ interface PasswordStatusProps {
   isLeaked: boolean;
 }
 
-const PasswordStatus = ({ isLeaked }: PasswordStatusProps) => {
+export const PasswordStatus = ({ isLeaked }: PasswordStatusProps) => {
   return (
     <div
       className={`flex items-start p-4 rounded-lg border ${isLeaked ? 'bg-red-50 border-red-200 dark:bg-red-900 dark:border-red-700' : 'bg-green-50 border-green-200 dark:bg-green-900 dark:border-green-700'}`}
@@ -23,5 +23,3 @@ const PasswordStatus = ({ isLeaked }: PasswordStatusProps) => {
     </div>
   );
 };
-
-export default PasswordStatus;

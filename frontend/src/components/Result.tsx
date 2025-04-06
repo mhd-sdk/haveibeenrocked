@@ -1,6 +1,6 @@
-import AnssiRecommendations from './AnssiRecommendations';
-import PasswordStatus from './PasswordStatus';
-import PasswordStrength from './PasswordStrength';
+import { AnssiRecommendations } from './AnssiRecommendations';
+import { PasswordStatus } from './PasswordStatus';
+import { PasswordStrength } from './PasswordStrength';
 
 interface Props {
   results: {
