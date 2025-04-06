@@ -35,6 +35,7 @@ func main() {
 
 	fiber.Use(logger.New(logger.Config{}))
 
-	fiber.Post("/api/v1", handlers.HandleCheck)
+	fiber.Post("/api/check", handlers.HandleCheck)
+	slog.Info("Service listening on port: " + os.Getenv("API_PORT"))
 	log.Fatal(fiber.Listen(":" + os.Getenv("API_PORT")))
 }

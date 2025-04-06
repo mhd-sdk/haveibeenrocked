@@ -11,12 +11,12 @@ COPY . .
 
 RUN bun run build
 
-# Use Nginx as the production server
+# Use Nginx as the production image 
 FROM nginx
 
 COPY --from=base /app/dist /usr/share/nginx/html
 
-# Expose port 80 for the Nginx server
+# Just a documentation of wich port the app runs inside the container
 EXPOSE 80
 
 # Start Nginx when the container runs

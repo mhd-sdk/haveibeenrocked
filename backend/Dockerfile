@@ -19,5 +19,8 @@ WORKDIR /app
 # Copy only the compiled binary from the builder stage
 COPY --from=builder /app/backend /app/backend
 
+# Just a documentation of wich port the app runs inside the container
+EXPOSE 80
+
 # Command to run the application when the container starts
 ENTRYPOINT ["/app/backend"]
