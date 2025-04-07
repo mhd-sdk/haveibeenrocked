@@ -106,4 +106,16 @@ func LoadPasswords() {
 	writer.WriteString(strings.Join(lines, ",\n") + ";")
 }
 
+func Hash(password string) {
+	hasher := sha1.New()
+
+	hasher.Write([]byte(password))
+
+	hash := hasher.Sum(nil)
+
+	hashHex := hex.EncodeToString(hash)
+
+	fmt.Println("First 5 characters of the hash:", hashHex[:5])
+}
+
 var Default = Dev

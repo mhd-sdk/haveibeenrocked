@@ -2,15 +2,13 @@ package repositories
 
 import (
 	"context"
-	"crypto/sha1"
-	"encoding/hex"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+// https://www.codingexplorations.com/blog/mastering-the-repository-pattern-in-go-a-comprehensive-guide
 type PasswordRepository interface {
-	CheckPassword(ctx context.Context, password string) (bool, error)
-	CheckPasswordPrefix(ctx context.Context, prefix string) (bool, error)
+	FindMatching(ctx context.Context, prefix string) ([]string, error)
 }
 
 type passwordRepo struct {
@@ -21,23 +19,27 @@ func NewPasswordRepository(pool *pgxpool.Pool) PasswordRepository {
 	return &passwordRepo{pool: pool}
 }
 
-func (r *passwordRepo) CheckPassword(ctx context.Context, password string) (bool, error) {
-	var storedHash, salt string
-	err := r.pool.QueryRow(ctx, "SELECT hashed_password, salt FROM compromised_passwords WHERE hashed_password = $1", password).Scan(&storedHash, &salt)
+func (r *passwordRepo) FindMatching(ctx context.Context, prefix string) ([]string, error) {
+	var passwords []string
+	query := "SELECT hashed_password FROM compromised_passwords WHERE hashed_password LIKE $1"
+	rows, err := r.pool.Query(ctx, query, prefix+"%")
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
-	hashedInput := sha1.Sum([]byte(password + salt))
-	return hex.EncodeToString(hashedInput[:]) == storedHash, nil
-}
+	defer rows.Close()
 
-func (r *passwordRepo) CheckPasswordPrefix(ctx context.Context, prefix string) (bool, error) {
-	var count int
-	query := "SELECT COUNT(*) FROM compromised_passwords WHERE hashed_password LIKE $1"
-	err := r.pool.QueryRow(ctx, query, prefix+"%").Scan(&count)
-	if err != nil {
-		return false, err
+	for rows.Next() {
+		var password string
+		if err := rows.Scan(&password); err != nil {
+			return nil, err
+		}
+		passwords = append(passwords, password)
 	}
-	return count > 0, nil
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return passwords, nil
 }

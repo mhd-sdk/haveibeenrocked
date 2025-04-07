@@ -16,6 +16,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./db/init.sql:/docker-entrypoint-initdb.d/01_init.sql
       - ./db/import.sql:/docker-entrypoint-initdb.d/02_import.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres -h localhost -p 5432"]
+      interval: 10s
+      retries: 15 
+      timeout: 5s
+      start_period: 0s
 
   ollama:
     image: ollama/ollama:latest
