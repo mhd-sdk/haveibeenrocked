@@ -53,7 +53,7 @@ func BuildImages() error {
 func LoadPasswords() {
 	downloadURL := "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
 	inputFile := "rockyou.txt"
-	outputFile := "import.sql"
+	outputFile := "db/import.sql"
 
 	resp, err := http.Get(downloadURL)
 	if err != nil {

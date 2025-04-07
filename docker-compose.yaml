@@ -36,6 +36,8 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01_init.sql
+      - ./db/import.sql:/docker-entrypoint-initdb.d/02_import.sql
     networks:
       - pwnd-network
 
