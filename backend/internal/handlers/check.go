@@ -2,8 +2,9 @@ package handlers
 
 import (
 	"context"
+	"crypto/sha1"
+	"encoding/hex"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/mhd-sdk/haveibeenrocked/internal/anssi"
 	"github.com/mhd-sdk/haveibeenrocked/internal/db"
@@ -16,35 +17,23 @@ type PasswordCheckResponse struct {
 
 var ctx = context.Background()
 
-func HandleCheck(repositories *db.Repositories, redisClient *redis.Client) fiber.Handler {
+func HandleCheck(repositories *db.Repositories) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		password := c.FormValue("password")
+		hash := sha1.Sum([]byte(password))
+		hashPrefix := hex.EncodeToString(hash[:])[:5]
 
-		// Vérifier le cache Redis
-		cacheKey := "password:" + password
-		cachedResult, err := redisClient.Get(ctx, cacheKey).Result()
-		if err == nil {
-			// Si trouvé dans le cache, renvoyer la réponse
-			return c.JSON(cachedResult)
-		}
-
-		// Vérifier les recommandations ANSSI
 		checkResult := anssi.CheckPassword(password)
 
-		// Vérifier dans la base de données si le mot de passe est compromis
-		isLeaked, err := repositories.PasswordRepo.CheckPassword(ctx, password)
+		isLeaked, err := repositories.PasswordRepo.CheckPasswordPrefix(ctx, hashPrefix)
 		if err != nil {
-			return c.Status(500).JSON(fiber.Map{"error": "Database error"})
+			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 		}
 
-		// Créer la réponse
 		response := PasswordCheckResponse{
 			IsLeaked:        isLeaked,
 			Recommendations: checkResult.Missing,
 		}
-
-		// Mettre en cache le résultat dans Redis
-		redisClient.Set(ctx, cacheKey, response, 0)
 
 		return c.JSON(response)
 	}

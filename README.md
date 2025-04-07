@@ -11,6 +11,7 @@
 - repositories pattern
 - automated download of passwords file with mage
 - dependabot for "secure by design"
+- Implement k-anonymity
 
 ## Notes
 - I chose to make a multi-stage image for the frontend, first layer for building Vite, second for lightweight production-ready

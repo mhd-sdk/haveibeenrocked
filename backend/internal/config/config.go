@@ -14,6 +14,7 @@ var (
 
 // Load env variables from .env file if it exists, otherwise use system environment variables
 func LoadEnv() (err error) {
+	// this will NEVER overrride an env var that already exist
 	godotenv.Load()
 
 	apiPort := os.Getenv("API_PORT")
@@ -25,6 +26,7 @@ func LoadEnv() (err error) {
 	dbName := os.Getenv("DB_NAME")
 
 	if apiPort == "" || redisHost == "" || dbHost == "" || dbPort == "" || dbUser == "" || dbPassword == "" || dbName == "" {
+
 		return ErrMissingEnvVars
 	}
 

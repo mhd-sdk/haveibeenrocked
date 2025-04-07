@@ -3,9 +3,15 @@
 package main
 
 import (
+	"bufio"
+	"crypto/sha1"
+	"encoding/hex"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 var (
@@ -14,14 +20,7 @@ var (
 	srcDir     = "cmd/main.go"
 )
 
-func Build() error {
-	cmd := exec.Command("go", "build", "-o", binaryName, srcDir)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
-}
-
-func Run() error {
+func Dev() error {
 	cmd := exec.Command("go", "run", srcDir)
 	cmd.Dir = backendDir
 	cmd.Stdout = os.Stdout
@@ -29,20 +28,14 @@ func Run() error {
 	return cmd.Run()
 }
 
-func Clean() error {
-	fmt.Println("Cleaning...")
-	return os.Remove(binaryName)
-}
-
-func Test() error {
-	cmd := exec.Command("go", "test", "./...")
-	cmd.Dir = backendDir
+func DockerDev() error {
+	cmd := exec.Command("docker", "compose", "-f", "docker-compose.dev.yaml", "up", "-d")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 
-func ComposeUp() error {
+func DockerProd() error {
 	cmd := exec.Command("docker", "compose", "up", "-d")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -56,11 +49,61 @@ func BuildImages() error {
 	return cmd.Run()
 }
 
-func DevComposeUp() error {
-	cmd := exec.Command("docker", "compose", "-f", "docker-compose.dev.yaml", "up", "-d")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+// Download and prepare sql import file
+func LoadPasswords() {
+	downloadURL := "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
+	inputFile := "rockyou.txt"
+	outputFile := "import.sql"
+
+	resp, err := http.Get(downloadURL)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	outFile, err := os.Create(inputFile)
+	if err != nil {
+		panic(err)
+	}
+	defer outFile.Close()
+
+	_, err = io.Copy(outFile, resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	inFile, err := os.Open(inputFile)
+	if err != nil {
+		panic(err)
+	}
+	defer inFile.Close()
+
+	outFile, err = os.Create(outputFile)
+	if err != nil {
+		panic(err)
+	}
+	defer outFile.Close()
+
+	writer := bufio.NewWriter(outFile)
+	defer writer.Flush()
+
+	writer.WriteString("INSERT INTO compromised_passwords (hashed_password) VALUES\n")
+
+	scanner := bufio.NewScanner(inFile)
+	var lines []string
+
+	for scanner.Scan() {
+		password := strings.TrimSpace(scanner.Text())
+		hash := sha1.Sum([]byte(password))
+		hashedPassword := hex.EncodeToString(hash[:])
+		lines = append(lines, fmt.Sprintf("('%s')", hashedPassword))
+	}
+
+	if err := scanner.Err(); err != nil {
+		panic(err)
+	}
+
+	writer.WriteString(strings.Join(lines, ",\n") + ";")
 }
 
-var Default = Build
+var Default = Dev

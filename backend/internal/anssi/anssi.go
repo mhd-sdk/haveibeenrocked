@@ -1,22 +1,12 @@
 package anssi
 
-type Recommendation string
-
-const (
-	MinLength         Recommendation = "MinLength"
-	UppercaseLetters  Recommendation = "UppercaseLetters"
-	LowercaseLetters  Recommendation = "LowercaseLetters"
-	NumericCharacters Recommendation = "NumericCharacters"
-	SpecialCharacters Recommendation = "SpecialCharacters"
-)
-
 type CheckResult struct {
 	IsValid bool
 	Missing []Recommendation
 }
 
 func CheckPassword(password string) CheckResult {
-	var missing []Recommendation
+	missing := []Recommendation{}
 
 	if len(password) < 12 {
 		missing = append(missing, MinLength)

@@ -6,7 +6,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/lmittmann/tint"
@@ -36,16 +35,12 @@ func main() {
 		log.Fatal("Failed to initialize database and repositories:", err)
 	}
 
-	redisClient := redis.NewClient(&redis.Options{
-		Addr: os.Getenv("REDIS_HOST"),
-	})
-
 	fiber := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
 	fiber.Use(logger.New(logger.Config{}))
 
-	fiber.Post("/api/check", handlers.HandleCheck(repos, redisClient))
+	fiber.Post("/api/check", handlers.HandleCheck(repos))
 
 	slog.Info("Service listening on port: " + os.Getenv("API_PORT"))
 
