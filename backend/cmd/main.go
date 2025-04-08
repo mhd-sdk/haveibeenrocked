@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/lmittmann/tint"
 	"github.com/mhd-sdk/haveibeenrocked/internal/config"
@@ -39,6 +40,7 @@ func main() {
 		DisableStartupMessage: true,
 	})
 	fiber.Use(logger.New(logger.Config{}))
+	fiber.Use(cors.New())
 
 	fiber.Post("/api/check", handlers.HandleCheck(repos))
 

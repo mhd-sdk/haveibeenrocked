@@ -36,6 +36,7 @@ func DockerDev() error {
 }
 
 func DockerProd() error {
+	BuildImages()
 	cmd := exec.Command("docker", "compose", "up", "-d")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

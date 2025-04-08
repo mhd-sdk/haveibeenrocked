@@ -7,7 +7,7 @@ interface PasswordStrengthProps {
 export const PasswordStrength = ({ score }: PasswordStrengthProps) => {
   return (
     <div className="bg-gray-50 p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700">
-      <h3 className="text-lg font-semibold mb-2">Password Strength</h3>
+      <h3 className="text-lg font-semibold mb-2">AI Rating</h3>
       <div className="flex items-center justify-between">
         <div>
           <StarRating score={score} />

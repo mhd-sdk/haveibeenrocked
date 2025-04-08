@@ -11,7 +11,7 @@ var ctx = context.Background()
 
 func HandleCheck(repositories *db.Repositories) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		prefix := c.FormValue("password")
+		prefix := c.FormValue("prefix")
 
 		matchingHashess, err := repositories.PasswordRepo.FindMatching(ctx, prefix)
 		if err != nil {

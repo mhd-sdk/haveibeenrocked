@@ -14,7 +14,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    env_file: "backend/example.env"
     networks:
       - pwnd-network
 
@@ -47,10 +46,18 @@ services:
     environment:
       - OLLAMA_API_PORT=11434
       - OLLAMA_API_HOST=localhost
+      - OLLAMA_ORIGINS=*
     volumes:
       - ollama_data:/ollama
     networks:
       - pwnd-network
+    entrypoint: >
+      sh -c "
+        ollama serve &
+        sleep 5 &&
+        ollama pull gemma3:4b &&
+        wait
+      "
       
   nginx:
     image: nginx:latest

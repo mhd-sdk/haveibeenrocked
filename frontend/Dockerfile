@@ -9,7 +9,7 @@ RUN bun install
 
 COPY . .
 
-RUN bun run build
+RUN NODE_ENV=production bun run build
 
 # Use Nginx as the production image 
 FROM nginx
