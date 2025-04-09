@@ -19,18 +19,19 @@ func LoadEnv() (err error) {
 
 	apiPort := os.Getenv("API_PORT")
 	redisHost := os.Getenv("REDIS_HOST")
+	redisPort := os.Getenv("REDIS_PORT")
 	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 
-	if apiPort == "" || redisHost == "" || dbHost == "" || dbPort == "" || dbUser == "" || dbPassword == "" || dbName == "" {
-
+	if apiPort == "" || redisHost == "" || redisPort == "" || dbHost == "" || dbPort == "" || dbUser == "" || dbPassword == "" || dbName == "" {
 		return ErrMissingEnvVars
 	}
 
 	os.Setenv("DATABASE_URL", fmt.Sprintf("postgres://%s:%s@%s:%s/%s", dbUser, dbPassword, dbHost, dbPort, dbName))
+	os.Setenv("REDIS_URL", fmt.Sprintf("%s:%s", redisHost, redisPort))
 
 	return nil
 }

@@ -42,9 +42,11 @@ func main() {
 	fiber.Use(logger.New(logger.Config{}))
 	fiber.Use(cors.New())
 
+	port := os.Getenv("API_PORT")
+
 	fiber.Post("/api/check", handlers.HandleCheck(repos))
 
-	slog.Info("Service listening on port: " + os.Getenv("API_PORT"))
+	slog.Info("Service listening on port: " + port)
 
-	log.Fatal(fiber.Listen(":" + os.Getenv("API_PORT")))
+	log.Fatal(fiber.Listen(":" + port))
 }

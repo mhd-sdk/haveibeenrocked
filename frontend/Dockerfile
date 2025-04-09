@@ -11,7 +11,6 @@ COPY . .
 
 RUN NODE_ENV=production bun run build
 
-# Use Nginx as the production image 
 FROM nginx
 
 COPY --from=base /app/dist /usr/share/nginx/html

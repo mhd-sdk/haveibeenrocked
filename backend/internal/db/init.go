@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/mhd-sdk/haveibeenrocked/internal/repositories"
 )
@@ -19,7 +20,16 @@ func Init() (*Repositories, error) {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
 
-	passwordRepo := repositories.NewPasswordRepository(pool)
+	redisClient := redis.NewClient(&redis.Options{
+		Addr: os.Getenv("REDIS_HOST") + ":" + os.Getenv("REDIS_PORT"),
+	})
+
+	_, err = redisClient.Ping(context.Background()).Result()
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to Redis: %w", err)
+	}
+
+	passwordRepo := repositories.NewPasswordRepository(pool, redisClient)
 
 	return &Repositories{
 		PasswordRepo: passwordRepo,
