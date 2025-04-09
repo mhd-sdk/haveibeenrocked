@@ -5,9 +5,10 @@ import { AnssiRecommendations } from './AnssiRecommendations';
 import { PasswordForm } from './PasswordForm';
 import { Result } from './Result';
 
-const MainContent = () => {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const ollamaUrl = import.meta.env.VITE_OLLAMA_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
+const ollamaUrl = import.meta.env.VITE_OLLAMA_URL;
+
+export const MainContent = () => {
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState('');
@@ -36,22 +37,16 @@ const MainContent = () => {
         // also having the prompt stored in frontend is bad as anybody could change it, but this feature was not asked
         // so i made it fast considering the time i had for the project
         prompt: `Rate the password "${password}" on a scale of 1 to 5, and only answer with the number, no sentences allowed, no formating allowed (dont write carriage)`,
-        model: 'gemma3:4b',
+        model: 'llama3.1:8b',
         stream: false,
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        setScore(data.response);
-      });
+      .then((data) => setScore(data.response));
 
     setIsLoading(false);
     setShowResults(true);
     setIsLeaked(isLeaked);
-  };
-
-  const handleChange = (value: string) => {
-    setPassword(value);
   };
 
   const recommendations = validatePassword(password);
@@ -64,12 +59,10 @@ const MainContent = () => {
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
               Check if your password has been compromised
             </h1>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              Search across multiple data breaches to see if your password has been compromised.
-            </p>
+            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">Check if your password has been compromised.</p>
           </div>
           <div className="w-full max-w-md space-y-2">
-            <PasswordForm isLoading={isLoading} onSubmit={handleSubmit} password={password} onChange={handleChange} />
+            <PasswordForm isLoading={isLoading} onSubmit={handleSubmit} password={password} onChange={setPassword} />
           </div>
         </div>
       </div>
@@ -82,5 +75,3 @@ const MainContent = () => {
     </section>
   );
 };
-
-export default MainContent;

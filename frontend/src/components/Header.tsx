@@ -1,11 +1,11 @@
 import { Moon, ShieldAlert, Sun } from 'lucide-react';
 
 interface Props {
-  toggleDarkMode: () => void;
+  onToggleDarkMode: () => void;
   darkMode: boolean;
 }
 
-export const Header = ({ toggleDarkMode, darkMode }: Props) => {
+export const Header = ({ onToggleDarkMode, darkMode }: Props) => {
   return (
     <header className="px-4 lg:px-6 h-16 flex items-center border-b">
       <a className="flex items-center justify-center" href="#">
@@ -26,7 +26,7 @@ export const Header = ({ toggleDarkMode, darkMode }: Props) => {
           Contact
         </a>
 
-        <button onClick={toggleDarkMode} className="text-sm font-medium cursor-pointer">
+        <button onClick={onToggleDarkMode} className="text-sm font-medium cursor-pointer">
           {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </button>
       </nav>

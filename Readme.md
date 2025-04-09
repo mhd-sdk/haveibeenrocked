@@ -19,10 +19,8 @@
 2. [Stack](#-stack)
 3. [Features](#-features)
 4. [Setup](#-setup)
-   - [Clone the repository](#clone-the-repository)
-   - [Navigate to the project directory](#navigate-to-the-project-directory)
    - [Prerequisites](#prerequisites)
-   - [Importing the Passwords Database](#importing-the-passwords-database)
+   - [How to import rockyou database](#import-the-rockyou-database)
    - [How to run the app](#how-to-run-the-app)
 5. [Contributing](#contributing)
 
@@ -56,23 +54,12 @@ I used Nginx as a reverse proxy to handle incoming requests and route them to th
 When the client requests a password lookup, the password is hashed and only the first 5 characters of this hash are sent to the server. The server then returns a list of matching hashes. This ensures that the server never sees the full hash, and even if the connection between the client and server is compromised, the attacker will not be able to identify the right hash.
 - **Modern database**: Utilizes Redis for fast lookups of frequently requested passwords.
 To avoid overloading the database with requests, the application caches the most frequently requested passwords in Redis. This allows for quick lookups and reduces the load on the database.
-- **Scalable Architecture**: Built with Docker for easy deployment and scaling.
 - **Developer-Friendly**: Includes Mage tasks for streamlined development and deployment workflows.
 - **AI Integration**: Uses Ollama for local LLM capabilities, providing a rating of password strength.
 
 ---
 
 ## 🛠️ Setup
-
-### Clone the repository
-
-```bash
-git clone https://github.com/your-repo/haveibeenrocked.git
-```
-### Navigate to the project directory
-```bash
-cd haveibeenrocked
-```
 
 ## Prerequisites
 
@@ -85,7 +72,17 @@ Before running the application, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (v18.0.0 or higher, optional, for frontend development)
 - [Bun](https://bun.sh/) (v1.0.0 or higher, optional, for frontend development)
 
-### Importing the Passwords Database
+### Clone the repository
+
+```bash
+git clone https://github.com/your-repo/haveibeenrocked.git
+```
+### Navigate to the project directory
+```bash
+cd haveibeenrocked
+```
+
+### Import the rockyou database
 The following command will download the password database and create a SQL file.
 This SQL file will then automatically be loaded in a docker volume for the postgres database, which will execute it on startup.
 
@@ -104,7 +101,7 @@ mage DockerProd
 ```
 This command will build and run the Docker containers for both the backend and frontend services. The app will be accessible on `http://localhost`.
 
-### Contributing
+## Contributing
 To facilitate development, the project includes a docker-compose file that sets up the necessary services. you can run it using the following command:
 
 ```bash

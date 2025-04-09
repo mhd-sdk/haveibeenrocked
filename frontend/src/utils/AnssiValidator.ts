@@ -1,9 +1,9 @@
 export enum Recommendations {
-  LENGTH = 'Le mot de passe doit contenir au moins 12 caractères.',
-  UPPERCASE = 'Le mot de passe doit contenir des lettres majuscules.',
-  LOWERCASE = 'Le mot de passe doit contenir des lettres minuscules.',
-  NUMBERS = 'Le mot de passe doit contenir des chiffres.',
-  SPECIAL_CHARACTERS = 'Le mot de passe doit contenir des caractères spéciaux.',
+  LENGTH = 'Password must contain at least 12 characters.',
+  UPPERCASE = 'Password must contain uppercase letters.',
+  LOWERCASE = 'Password must contain lowercase letters.',
+  NUMBERS = 'Password must contain digits.',
+  SPECIAL_CHARACTERS = 'Password must contain special characters.',
 }
 
 export const validatePassword = (password: string): Recommendations[] => {

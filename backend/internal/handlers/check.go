@@ -13,11 +13,11 @@ func HandleCheck(repositories *db.Repositories) fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		prefix := c.FormValue("prefix")
 
-		matchingHashess, err := repositories.PasswordRepo.FindMatching(ctx, prefix)
+		matching, err := repositories.PasswordRepo.FindMatching(ctx, prefix)
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 		}
 
-		return c.JSON(matchingHashess)
+		return c.JSON(matching)
 	}
 }

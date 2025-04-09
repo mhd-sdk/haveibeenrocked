@@ -1,11 +1,11 @@
 import { Recommendations } from '@/utils/AnssiValidator';
 import { Check, X } from 'lucide-react';
 
-interface AnssiRecommendationsProps {
+interface Props {
   missings: Recommendations[];
 }
 
-export const AnssiRecommendations = ({ missings }: AnssiRecommendationsProps) => {
+export const AnssiRecommendations = ({ missings }: Props) => {
   const meetsANSSI = missings.length === 0;
   return (
     <div className="bg-gray-50 p-4 rounded-lg border dark:bg-gray-800 dark:border-gray-700">

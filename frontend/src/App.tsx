@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import MainContent from './components/MainContent';
-import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { MainContent } from './components/MainContent';
 
 export default function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -9,7 +9,7 @@ export default function App() {
     return savedTheme === 'true';
   });
 
-  const toggleDarkMode = () => {
+  const handleToggleDarkMode = () => {
     setDarkMode((prevMode) => {
       const newMode = !prevMode;
       localStorage.setItem('darkMode', newMode.toString());
@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <div className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}>
-      <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
+      <Header onToggleDarkMode={handleToggleDarkMode} darkMode={darkMode} />
       <main className="flex-1">
         <MainContent />
       </main>

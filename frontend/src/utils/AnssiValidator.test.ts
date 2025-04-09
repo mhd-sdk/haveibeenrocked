@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Recommendations, validatePassword } from './AnssiValidator';
 
 describe('validatePassword', () => {
-  it('devrait retourner toutes les recommandations pour un mot de passe vide', () => {
+  it('should return all recommendations for an empty password', () => {
     const result = validatePassword('');
     expect(result).toEqual([
       Recommendations.LENGTH,
@@ -13,37 +13,37 @@ describe('validatePassword', () => {
     ]);
   });
 
-  it('devrait retourner LENGTH pour un mot de passe trop court', () => {
+  it('should return LENGTH for a password that is too short', () => {
     const result = validatePassword('Ab1!');
     expect(result).toContain(Recommendations.LENGTH);
   });
 
-  it('devrait retourner UPPERCASE si aucune majuscule', () => {
+  it('should return UPPERCASE if no uppercase letter', () => {
     const result = validatePassword('abcdefghij1!');
     expect(result).toContain(Recommendations.UPPERCASE);
   });
 
-  it('devrait retourner LOWERCASE si aucune minuscule', () => {
+  it('should return LOWERCASE if no lowercase letter', () => {
     const result = validatePassword('ABCDEFGHIJ1!');
     expect(result).toContain(Recommendations.LOWERCASE);
   });
 
-  it('devrait retourner NUMBERS si aucun chiffre', () => {
+  it('should return NUMBERS if no digits', () => {
     const result = validatePassword('ABCDEFghij!!');
     expect(result).toContain(Recommendations.NUMBERS);
   });
 
-  it('devrait retourner SPECIAL_CHARACTERS si aucun caractère spécial', () => {
+  it('should return SPECIAL_CHARACTERS if no special characters', () => {
     const result = validatePassword('ABCDEFghij123');
     expect(result).toContain(Recommendations.SPECIAL_CHARACTERS);
   });
 
-  it('devrait retourner un tableau vide pour un mot de passe valide', () => {
+  it('should return an empty array for a valid password', () => {
     const result = validatePassword('ABCdef123!@#');
     expect(result).toEqual([]);
   });
 
-  it('devrait retourner plusieurs recommandations si plusieurs critères ne sont pas satisfaits', () => {
+  it('should return multiple recommendations if multiple criteria are not met', () => {
     const result = validatePassword('abcdef');
     expect(result).toContain(Recommendations.LENGTH);
     expect(result).toContain(Recommendations.UPPERCASE);
@@ -52,12 +52,12 @@ describe('validatePassword', () => {
     expect(result).toHaveLength(4);
   });
 
-  it('devrait correctement identifier un mot de passe qui ne manque que de caractères spéciaux', () => {
+  it('should correctly identify a password that only lacks special characters', () => {
     const result = validatePassword('ABCDEFghij123456');
     expect(result).toEqual([Recommendations.SPECIAL_CHARACTERS]);
   });
 
-  it('devrait correctement identifier un mot de passe qui ne manque que de chiffres', () => {
+  it('should correctly identify a password that only lacks digits', () => {
     const result = validatePassword('ABCDEFghijkl!@#');
     expect(result).toEqual([Recommendations.NUMBERS]);
   });
