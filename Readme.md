@@ -15,10 +15,10 @@
 
 ## 📋 Table of Contents
 
-1. [Overview](#overview)
+1. [Overview](#-overview)
 2. [Stack](#-stack)
 3. [Features](#-features)
-4. [Setup](#-setup)
+4. [Setup](#%EF%B8%8F-setup)
    - [Prerequisites](#prerequisites)
    - [How to import rockyou database](#import-the-rockyou-database)
    - [How to run the app](#how-to-run-the-app)
@@ -52,7 +52,7 @@ I used Nginx as a reverse proxy to handle incoming requests and route them to th
 
 - **K-anonymity**: First of all, the passwords are stored as SHA-1 hash (I wanted to use a more robust one like bcrypt or Argon2 but the salt made the implementation of k-anonymity too complex as I would have to share the salt with the frontend. Also SHA-1 is way faster).<br>
 When the client requests a password lookup, the password is hashed and only the first 5 characters of this hash are sent to the server. The server then returns a list of matching hashes. This ensures that the server never sees the full hash, and even if the connection between the client and server is compromised, the attacker will not be able to identify the right hash.
-- **Modern database**: Utilizes Redis for fast lookups of frequently requested passwords.
+- **Caching**: Utilizes Redis for fast lookups of frequently requested passwords.
 To avoid overloading the database with requests, the application caches the most frequently requested passwords in Redis. This allows for quick lookups and reduces the load on the database.
 - **Developer-Friendly**: Includes Mage tasks for streamlined development and deployment workflows.
 - **AI Integration**: Uses Ollama for local LLM capabilities, providing a rating of password strength.
@@ -75,7 +75,7 @@ Before running the application, ensure you have the following installed:
 ### Clone the repository
 
 ```bash
-git clone https://github.com/your-repo/haveibeenrocked.git
+git clone https://github.com/mhd-sdk/haveibeenrocked.git
 ```
 ### Navigate to the project directory
 ```bash
@@ -102,7 +102,7 @@ mage DockerProd
 This command will build and run the Docker containers for both the backend and frontend services. The app will be accessible on `http://localhost`.
 
 ## Contributing
-To facilitate development, the project includes a docker-compose file that sets up the necessary services. you can run it using the following command:
+To facilitate development, the project includes a second docker-compose file that sets up the necessary services. you can run it using the following command:
 
 ```bash
 mage DockerDev
