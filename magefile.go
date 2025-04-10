@@ -49,12 +49,12 @@ func BuildImages() error {
 	return cmd.Run()
 }
 
-// Download and prepare sql import file
 func LoadPasswords() {
 	downloadURL := "https://github.com/brannondorsey/naive-hashcat/releases/download/data/rockyou.txt"
 	inputFile := "rockyou.txt"
 	outputFile := "db/import.sql"
 
+	fmt.Println("⬇️ Downloading rockyou.txt...")
 	resp, err := http.Get(downloadURL)
 	if err != nil {
 		panic(err)
@@ -71,6 +71,7 @@ func LoadPasswords() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("✅ Download complete!")
 
 	inFile, err := os.Open(inputFile)
 	if err != nil {
@@ -87,23 +88,27 @@ func LoadPasswords() {
 	writer := bufio.NewWriter(outFile)
 	defer writer.Flush()
 
-	writer.WriteString("INSERT INTO compromised_passwords (hashed_password) VALUES\n")
+	writer.WriteString("COPY compromised_passwords (hashed_password) FROM stdin;\n")
 
 	scanner := bufio.NewScanner(inFile)
-	var lines []string
+
+	fmt.Println("Processing passwords...")
 
 	for scanner.Scan() {
 		password := strings.TrimSpace(scanner.Text())
 		hash := sha1.Sum([]byte(password))
 		hashedPassword := hex.EncodeToString(hash[:])
-		lines = append(lines, fmt.Sprintf("('%s')", hashedPassword))
+
+		writer.WriteString(hashedPassword + "\n")
 	}
 
 	if err := scanner.Err(); err != nil {
 		panic(err)
 	}
 
-	writer.WriteString(strings.Join(lines, ",\n") + ";")
+	writer.WriteString("\\.\n")
+
+	fmt.Println("✅ Passwords processed and prepared for PostgreSQL COPY import!")
 }
 
 func Hash(password string) {
