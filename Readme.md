@@ -100,6 +100,7 @@ To run the entire stack, including the backend and frontend, you can use the fol
 mage DockerProd
 ```
 This command will build and run the Docker containers for both the backend and frontend services. The app will be accessible on `http://localhost`.
+Please note the LLM model may take a few seconds to load
 
 ## Contributing
 To facilitate development, the project includes a second docker-compose file that sets up the necessary services. you can run it using the following command:
