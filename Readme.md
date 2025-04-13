@@ -40,18 +40,17 @@
 Go is used for the backend API, providing a fast and efficient server-side solution. It is my favorite language for building robust and scalable applications.
 - **Frontend**: React, Vite, TypeScript.<br>
 React is used for the frontend, providing a dynamic and responsive user interface. Vite is used as the build tool for fast development and TypeScript adds type safety to the codebase.
-- **Database**: Redis.<br>
-Redis is used as a cache for frequently requested passwords, allowing for quick lookups and reducing the load on the database.
+- **Database**: Postgres.<br>
+Postgres is a modern and powerful database. It's also the database used for the Algo light house app ;)
 - **Reverse Proxy**: Nginx<br>
 I used Nginx as a reverse proxy to handle incoming requests and route them to the appropriate service. Allowing to serve the frontend and backend on the same domain.
-- **Containers**: Docker / Docker Compose
 
 ---
 
 ## 🔧 Features
 
 - **K-anonymity**: First of all, the passwords are stored as SHA-1 hash (I wanted to use a more robust one like bcrypt or Argon2 but the salt made the implementation of k-anonymity too complex as I would have to share the salt with the frontend. Also SHA-1 is way faster).<br>
-When the client requests a password lookup, the password is hashed and only the first 5 characters of this hash are sent to the server. The server then returns a list of matching hashes. This ensures that the server never sees the full hash, and even if the connection between the client and server is compromised, the attacker will not be able to identify the right hash.
+When the client requests a password lookup, the password is hashed and only the first 5 characters of this hash are sent to the server. The server then returns a list of matching hashes. This ensures that the server never sees the full hash, and even if the connection between the client and server is compromised (wich should not happen if ssl is setup), the attacker will not be able to identify the right hash.
 - **Caching**: Utilizes Redis for fast lookups of frequently requested passwords.
 To avoid overloading the database with requests, the application caches the most frequently requested passwords in Redis. This allows for quick lookups and reduces the load on the database.
 - **Developer-Friendly**: Includes Mage tasks for streamlined development and deployment workflows.
